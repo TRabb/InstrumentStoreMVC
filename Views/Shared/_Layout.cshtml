@@ -6,25 +6,28 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <script src="https://kit.fontawesome.com/76824c6f78.js"></script>
     <style>
-        body{
-            background-image:url(Content/Background.jpg);
+        body {
+            background-image: url(Content/Background.jpg);
             background-repeat: no-repeat;
             background-size: 100%;
+            color: white;
         }
-        .table{
+
+        .table {
             background: white;
         }
-        .navbar{
-            background: white;
+
+        .navbar {
+            background: blue;
         }
-        .li{
+
+        a:hover {
             color: black;
         }
-        a:hover{
-            color: black;
-        }
-        a:visited{
+
+        a:visited {
             color: purple;
         }
     </style>
@@ -41,7 +44,7 @@
                 @Html.ActionLink("Music R' Us", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
+                <ul class="nav navbar-nav ml-auto">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Customers", "Index", "Customer")</li>
@@ -51,7 +54,9 @@
                     <li>@Html.ActionLink("Store Details", "Index", "StoreDetail")</li>
                     <li>@Html.ActionLink("Contact Us", "Contact", "Home")</li>
                 </ul>
-                @Html.Partial("_LoginPartial")
+                <ul>
+                    @Html.Partial("_LoginPartial")
+                </ul>
             </div>
         </div>
     </div>
