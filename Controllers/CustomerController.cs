@@ -21,6 +21,39 @@ namespace InstrumentStoreMVC.Controllers
             return View(db.Customers.ToList());
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditDisplay([Bind(Include = "ID,FirstName,LastName,Age,State,Phone,Email,Orders")] Customer customer)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(customer).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Display");
+            }
+            return View(customer);
+        }
+
+        // GET: Student/Edit/5
+        public ActionResult EditDisplay(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Customer customer = db.Customers.Find(id);
+            if (customer == null)
+            {
+                return HttpNotFound();
+            }
+            return View(customer);
+        }
+
+        public ActionResult Display()
+        {
+            return View(db.Customers.ToList());
+        }
+
         // GET: Customer/Details/5
         public ActionResult Details(int? id)
         {
