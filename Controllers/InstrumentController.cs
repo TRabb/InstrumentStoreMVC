@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using InstrumentStoreMVC.DAL;
 using InstrumentStoreMVC.Models;
+using PagedList;
 
 namespace InstrumentStoreMVC.Controllers
 {
@@ -16,9 +17,49 @@ namespace InstrumentStoreMVC.Controllers
         private StoreContext db = new StoreContext();
 
         // GET: Instrument
-        public ActionResult Index()
+        public ViewResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
-            return View(db.Instruments.ToList());
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.PriceSortParm = sortOrder == "Price" ? "price_desc" : "Price";
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.CurrentFilter = searchString;
+            var instruments = from i in db.Instruments
+                           select i;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                instruments = instruments.Where(i => i.InstrumentName.Contains(searchString));
+
+            }
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    instruments = instruments.OrderByDescending(i => i.InstrumentName);
+                    break;
+                case "Price":
+                    instruments = instruments.OrderBy(i => i.Price);
+                    break;
+                case "price_desc":
+                    instruments = instruments.OrderByDescending(i => i.Price);
+                    break;
+                default:
+                    instruments = instruments.OrderBy(i => i.InstrumentName);
+                    break;
+            }
+
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+            return View(instruments.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Instrument/Details/5
@@ -49,12 +90,23 @@ namespace InstrumentStoreMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID,InstrumentName,Price")] Instrument instrument)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Instruments.Add(instrument);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    db.Instruments.Add(instrument);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+
             }
+            catch (DataException)
+            {
+                ModelState.AddModelError("",
+                    "Unable to save changes. Try again, and if the problem persists please see your system administrator");
+                throw;
+            }
+
 
             return View(instrument);
         }
@@ -81,21 +133,35 @@ namespace InstrumentStoreMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,InstrumentName,Price")] Instrument instrument)
         {
+            try
+            {
             if (ModelState.IsValid)
             {
                 db.Entry(instrument).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            }
+            catch (DataException)
+            {
+                ModelState.AddModelError("",
+                    "Unable to save changes. Try again, and if the problem persists please see your system administrator");
+                throw;
+            }
+
             return View(instrument);
         }
 
         // GET: Instrument/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int? id, bool? saveChangesError=false)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            if (saveChangesError.GetValueOrDefault())
+            {
+                ViewBag.ErrorMessage = "Delete failed. Try again, and if the problem persists please contanct your system administrator.";
             }
             Instrument instrument = db.Instruments.Find(id);
             if (instrument == null)
@@ -110,10 +176,20 @@ namespace InstrumentStoreMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            try
+            {
             Instrument instrument = db.Instruments.Find(id);
             db.Instruments.Remove(instrument);
             db.SaveChanges();
             return RedirectToAction("Index");
+            }
+            catch (DataException)
+            {
+                ModelState.AddModelError("",
+                    "Unable to save changes. Try again, and if the problem persists please see your system administrator");
+                throw;
+            }
+
         }
 
         protected override void Dispose(bool disposing)

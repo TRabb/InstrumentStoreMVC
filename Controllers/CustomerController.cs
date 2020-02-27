@@ -82,12 +82,22 @@ namespace InstrumentStoreMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID,FirstName,LastName,Age,State,Phone,Email")] Customer customer)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Customers.Add(customer);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    db.Customers.Add(customer);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
+            catch (DataException)
+            {
+                ModelState.AddModelError("",
+                    "Unable to save changes. Try again, and if the problem persists please see your system administrator");
+                throw;
+            }
+
 
             return View(customer);
         }
@@ -114,21 +124,35 @@ namespace InstrumentStoreMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,FirstName,LastName,Age,State,Phone,Email")] Customer customer)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Entry(customer).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    db.Entry(customer).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
+            catch (Exception)
+            {
+                ModelState.AddModelError("",
+                    "Unable to save changes. Try again, and if the problem persists please see your system administrator");
+                throw;
+            }
+
             return View(customer);
         }
 
         // GET: Customer/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int? id, bool? saveChangesError=false)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            if (saveChangesError.GetValueOrDefault())
+            {
+                ViewBag.ErrorMessage = "Delete failed. Try again, and if the problem persists please contanct your system administrator.";
             }
             Customer customer = db.Customers.Find(id);
             if (customer == null)
@@ -143,10 +167,20 @@ namespace InstrumentStoreMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Customer customer = db.Customers.Find(id);
-            db.Customers.Remove(customer);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                Customer customer = db.Customers.Find(id);
+                db.Customers.Remove(customer);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch (DataException)
+            {
+                ModelState.AddModelError("",
+                    "Unable to save changes. Try again, and if the problem persists please see your system administrator");
+                throw;
+            }
+
         }
 
         protected override void Dispose(bool disposing)

@@ -49,12 +49,22 @@ namespace InstrumentStoreMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID,CustomerID,DateOrdered,Quantity,StoreID")] Order order)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Orders.Add(order);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    db.Orders.Add(order);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
+            catch (DataException)
+            {
+                ModelState.AddModelError("",
+                    "Unable to save changes. Try again, and if the problem persists please see your system administrator");
+                throw;
+            }
+
 
             return View(order);
         }
@@ -81,12 +91,23 @@ namespace InstrumentStoreMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,CustomerID,DateOrdered,Quantity,StoreID")] Order order)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Entry(order).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    db.Entry(order).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+
             }
+            catch (DataException)
+            {
+                ModelState.AddModelError("",
+                    "Unable to save changes. Try again, and if the problem persists please see your system administrator");
+                throw;
+            }
+
             return View(order);
         }
 
@@ -96,6 +117,10 @@ namespace InstrumentStoreMVC.Controllers
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            if (saveChangesError.GetValueOrDefault())
+            {
+                ViewBag.ErrorMessage = "Delete failed. Try again, and if the problem persists please contanct your system administrator.";
             }
             Order order = db.Orders.Find(id);
             if (order == null)
@@ -110,10 +135,20 @@ namespace InstrumentStoreMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Order order = db.Orders.Find(id);
-            db.Orders.Remove(order);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                Order order = db.Orders.Find(id);
+                db.Orders.Remove(order);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch (DataException)
+            {
+                ModelState.AddModelError("",
+                    "Unable to save changes. Try again, and if the problem persists please see your system administrator");
+                throw;
+            }
+
         }
 
         protected override void Dispose(bool disposing)
