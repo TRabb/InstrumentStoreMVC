@@ -112,7 +112,7 @@ namespace InstrumentStoreMVC.Controllers
         }
 
         // GET: Order/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int? id, bool? saveChangesError = false)
         {
             if (id == null)
             {

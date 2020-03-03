@@ -157,6 +157,6 @@ namespace InstrumentStoreMVC.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
-        }\
+        }
     }
 }
