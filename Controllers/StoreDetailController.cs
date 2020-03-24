@@ -16,12 +16,14 @@ namespace InstrumentStoreMVC.Controllers
         private StoreContext db = new StoreContext();
 
         // GET: StoreDetail
+        [AllowAnonymous]
         public ActionResult Index()
         {
             return View(db.StoreDetails.ToList());
         }
 
         // GET: StoreDetail/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -37,6 +39,7 @@ namespace InstrumentStoreMVC.Controllers
         }
 
         // GET: StoreDetail/Create
+        [Authorize]
         public ActionResult Create()
         {
             return View();
@@ -70,6 +73,7 @@ namespace InstrumentStoreMVC.Controllers
         }
 
         // GET: StoreDetail/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -111,6 +115,7 @@ namespace InstrumentStoreMVC.Controllers
         }
 
         // GET: StoreDetail/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id, bool? saveChangesError = false)
         {
             if (id == null)

@@ -12,12 +12,15 @@ namespace InstrumentStoreMVC.Models
         public int ID { get; set; }
             [Required]
             [MaxLength(24,ErrorMessage = "Please enter a first name for this customer!")]
+            [Display(Name = "First Name")]
         public string FirstName { get; set; }
             [Required]
             [MaxLength(24,ErrorMessage = "Please enter a last name for this customer!")]
+            [Display(Name = "Last Name")]
         public string LastName { get; set; }
             [Required(ErrorMessage = "Please enter an age for this customer!")]
             [Range(1, 120)]
+
         public int Age { get; set; }
             [MaxLength(2)]
         public string State { get; set; }

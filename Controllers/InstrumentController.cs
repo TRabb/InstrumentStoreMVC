@@ -17,6 +17,7 @@ namespace InstrumentStoreMVC.Controllers
         private StoreContext db = new StoreContext();
 
         // GET: Instrument
+        [AllowAnonymous]
         public ViewResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
@@ -63,6 +64,7 @@ namespace InstrumentStoreMVC.Controllers
         }
 
         // GET: Instrument/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -78,6 +80,7 @@ namespace InstrumentStoreMVC.Controllers
         }
 
         // GET: Instrument/Create
+        [Authorize]
         public ActionResult Create()
         {
             return View();
@@ -112,6 +115,7 @@ namespace InstrumentStoreMVC.Controllers
         }
 
         // GET: Instrument/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -153,6 +157,7 @@ namespace InstrumentStoreMVC.Controllers
         }
 
         // GET: Instrument/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id, bool? saveChangesError=false)
         {
             if (id == null)

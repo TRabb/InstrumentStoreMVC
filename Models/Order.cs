@@ -12,6 +12,7 @@ namespace InstrumentStoreMVC.Models
         public int ID { get; set; }
             [Required]
             [Index]
+            [Display(Name = "Customer ID")]
         public int CustomerID { get; set; }
             [DataType(DataType.Date)]
             [DisplayFormat(DataFormatString ="{0:yyyy-MM-dd}", ApplyFormatInEditMode =true)]
@@ -21,6 +22,7 @@ namespace InstrumentStoreMVC.Models
         public int Quantity { get; set; }
             [Required]
             [Index]
+            [Display(Name = "Store ID")]
         public int StoreID { get; set; }
         public ICollection<OrderDetail> OrderDetails { get; set; }
     }

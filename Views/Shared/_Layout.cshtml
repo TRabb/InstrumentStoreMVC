@@ -21,7 +21,6 @@
         .navbar {
             background: blue;
         }
-
         a:hover {
             color: black;
         }
@@ -29,37 +28,57 @@
         a:visited {
             color: purple;
         }
+        .navbar-right{
+            padding-top:15px;
+            a:link{
+                      text-decoration:none;
+                  }
+        }
     </style>
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Music R' Us", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav ml-auto">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Customers", "Index", "Customer")</li>
-                    <li>@Html.ActionLink("Customer Display", "Display", "Customer")</li>
-                    <li>@Html.ActionLink("Instruments", "Index", "Instrument")</li>
-                    <li>@Html.ActionLink("Orders", "Index", "Order")</li>
-                    <li>@Html.ActionLink("Order Details", "Index", "OrderDetail")</li>
-                    <li>@Html.ActionLink("Store Details", "Index", "StoreDetail")</li>
-                    <li>@Html.ActionLink("Contact Us", "Contact", "Home")</li>
-                </ul>
-                <ul>
-                    @Html.Partial("_LoginPartial")
-                </ul>
-            </div>
+    <nav class="navbar navbar-expand-sm">
+        <a class="navbar-brand" href="#">Music Store</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+                <li class="nav-item nav-link">
+                    @Html.ActionLink("Home", "Index", "Home")
+                </li>
+                <li class="nav-item nav-link">
+                    @Html.ActionLink("About", "About", "Home")
+                </li>
+                <li class="nav-item nav-link">
+                    @Html.ActionLink("Customers", "Index", "Customer")
+                </li>
+                @*<li class="nav-item nav-link">
+                    @Html.ActionLink("Customer Display", "Display", "Customer")
+                </li>*@
+                <li class="nav-item nav-link">
+                    @Html.ActionLink("Instruments", "Index", "Instrument")
+                </li>
+                <li class="nav-item nav-link">
+                    @Html.ActionLink("Orders", "Index", "Order")
+                </li>
+                <li class="nav-item nav-link">
+                    @Html.ActionLink("Order Details", "Index", "OrderDetail")
+                </li>
+                <li class="nav-item nav-link">
+                    @Html.ActionLink("Store Details", "Index", "StoreDetail")
+                </li>
+                <li class="nav-item nav-link">
+                    @Html.ActionLink("Contact Us", "Contact", "Home")
+                </li>
+            </ul>
+            @Html.Partial("_LoginPartial")
+            @*<ul class="nav navbar-nav ml-auto">
+            <li><i class="fas fa-registered">@Html.ActionLink("Register", "Register", "Account")</i></li>
+            <li><i class="fas fa-sign-in-alt">@Html.ActionLink("Log in", "Login", "Account")</i></li>
+        </ul>*@
         </div>
-    </div>
+    </nav>
     <div class="container body-content">
         @RenderBody()
         <hr />

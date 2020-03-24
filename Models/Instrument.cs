@@ -12,6 +12,7 @@ namespace InstrumentStoreMVC.Models
         public int ID { get; set; }
             [Required]
             [MaxLength(24)]
+            [Display(Name = "Instrument Name")]
         public string InstrumentName { get; set; }
             [Required]
             [Range(1,10000)]

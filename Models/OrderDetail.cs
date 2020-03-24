@@ -13,12 +13,15 @@ namespace InstrumentStoreMVC.Models
         public int ID { get; set; }
             [Required]
             [Index]
+            [Display(Name = "Order ID")]
         public int OrderID { get; set; }
             [Required]
             [Index]
+            [Display(Name = "Store ID")]
         public int StoreID { get; set; }
             [Required]
             [Index]
+            [Display(Name = "Instrument ID")]
         public int InstrumentID { get; set; }
     }
 }
