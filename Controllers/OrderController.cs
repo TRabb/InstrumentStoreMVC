@@ -16,6 +16,7 @@ namespace InstrumentStoreMVC.Controllers
         private StoreContext db = new StoreContext();
 
         // GET: Order
+        [Authorize]
         public ActionResult Index()
         {
             return View(db.Orders.ToList());

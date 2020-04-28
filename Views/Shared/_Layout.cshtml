@@ -20,6 +20,10 @@
 
         .navbar {
             background: blue;
+            top: 0px;
+            position: fixed;
+            width: 100%;
+            
         }
         a:hover {
             color: black;
@@ -28,11 +32,12 @@
         a:visited {
             color: purple;
         }
-        .navbar-right{
-            padding-top:15px;
-            a:link{
-                      text-decoration:none;
-                  }
+        .navbar-brand{
+            color: black;
+        }
+        #login{
+            right: 0;
+            position: fixed;
         }
     </style>
 </head>
@@ -71,12 +76,10 @@
                 <li class="nav-item nav-link">
                     @Html.ActionLink("Contact Us", "Contact", "Home")
                 </li>
+                <li id="login" class="nav-item nav-link">
+                    @Html.Partial("_LoginPartial")
+                </li>
             </ul>
-            @Html.Partial("_LoginPartial")
-            @*<ul class="nav navbar-nav ml-auto">
-            <li><i class="fas fa-registered">@Html.ActionLink("Register", "Register", "Account")</i></li>
-            <li><i class="fas fa-sign-in-alt">@Html.ActionLink("Log in", "Login", "Account")</i></li>
-        </ul>*@
         </div>
     </nav>
     <div class="container body-content">
